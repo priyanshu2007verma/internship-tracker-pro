@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Application</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static',
+          filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+
+    <section class="form-section">
+
+        <h1>Edit Application</h1>
+
+        <form method="POST">
+
+            <input
+                type="text"
+                name="company"
+                value="{{ app.company }}"
+                required
+            >
+
+            <input
+                type="text"
+                name="role"
+                value="{{ app.role }}"
+                required
+            >
+
+            <select name="status">
+
+                <option
+                {% if app.status == "Applied" %}
+                selected
+                {% endif %}
+                >
+                Applied
+                </option>
+
+                <option
+                {% if app.status == "Interview" %}
+                selected
+                {% endif %}
+                >
+                Interview
+                </option>
+
+                <option
+                {% if app.status == "Offer" %}
+                selected
+                {% endif %}
+                >
+                Offer
+                </option>
+
+                <option
+                {% if app.status == "Rejected" %}
+                selected
+                {% endif %}
+                >
+                Rejected
+                </option>
+
+            </select>
+
+            <textarea
+                name="notes"
+            >{{ app.notes }}</textarea>
+
+            <button type="submit">
+
+                Update Application
+
+            </button>
+
+        </form>
+
+        <br>
+
+        <a href="/">
+            ← Back to Dashboard
+        </a>
+
+    </section>
+
+</div>
+
+</body>
+</html>

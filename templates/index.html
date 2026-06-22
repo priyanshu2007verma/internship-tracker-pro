@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internship Tracker Pro</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="container">
+
+    <header class="topbar">
+
+        <div>
+            <h1>Internship Tracker Pro</h1>
+
+            <p>
+                Welcome,
+                <strong>{{ username }}</strong>
+            </p>
+        </div>
+
+        <a href="/logout" class="logout-btn">
+            Logout
+        </a>
+
+    </header>
+
+    <!-- STATS -->
+
+    <div class="stats">
+
+        <div class="card">
+            <h2>{{ total }}</h2>
+            <p>Total Applications</p>
+        </div>
+
+        <div class="card">
+            <h2>{{ applied }}</h2>
+            <p>Applied</p>
+        </div>
+
+        <div class="card">
+            <h2>{{ interviews }}</h2>
+            <p>Interviews</p>
+        </div>
+
+        <div class="card">
+            <h2>{{ offers }}</h2>
+            <p>Offers</p>
+        </div>
+
+        <div class="card">
+            <h2>{{ rejected }}</h2>
+            <p>Rejected</p>
+        </div>
+
+    </div>
+
+    <!-- ADD APPLICATION -->
+
+    <section class="form-section">
+
+        <h2>Add Application</h2>
+
+        <form method="POST" action="/add">
+
+            <input
+                type="text"
+                name="company"
+                placeholder="Company Name"
+                required
+            >
+
+            <input
+                type="text"
+                name="role"
+                placeholder="Role"
+                required
+            >
+
+            <select name="status">
+
+                <option>Applied</option>
+                <option>Interview</option>
+                <option>Offer</option>
+                <option>Rejected</option>
+
+            </select>
+
+            <textarea
+                name="notes"
+                placeholder="Notes"
+            ></textarea>
+
+            <button type="submit">
+                Add Application
+            </button>
+
+        </form>
+
+    </section>
+
+    <!-- CHART -->
+
+    <section class="applications">
+        <h2>Application Analytics</h2>
+        
+        <div class="chart-container">
+
+            <canvas
+                id="statusChart"
+                data-applied="{{ applied }}"
+                data-interviews="{{ interviews }}"
+                data-offers="{{ offers }}"
+                data-rejected="{{ rejected }}">
+            </canvas>
+
+        </div>
+
+    </section>
+
+    <!-- SEARCH + FILTER -->
+
+    <section class="applications">
+
+        <h2>Applications</h2>
+
+        <form method="GET" class="search-form">
+
+            <input
+                type="text"
+                name="search"
+                placeholder="Search Company..."
+                value="{{ search }}"
+            >
+
+            <select name="status">
+
+                <option value="">All Status</option>
+
+                <option value="Applied">Applied</option>
+                <option value="Interview">Interview</option>
+                <option value="Offer">Offer</option>
+                <option value="Rejected">Rejected</option>
+
+            </select>
+
+            <button type="submit">
+                Filter
+            </button>
+
+        </form>
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Company</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Notes</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for app in apps %}
+
+                <tr>
+
+                    <td>{{ app.company }}</td>
+
+                    <td>{{ app.role }}</td>
+
+                    <td>
+                        <span class="badge {{ app.status.lower() }}">
+                            {{ app.status }}
+                        </span>
+                    </td>
+
+                    <td>{{ app.notes }}</td>
+
+                    <td>
+
+                        <a
+                            href="/edit/{{ app._id }}"
+                            class="edit-btn"
+                        >
+                            Edit
+                        </a>
+
+                    </td>
+
+                    <td>
+
+                        <a
+                            href="/delete/{{ app._id }}"
+                            class="delete-btn"
+                            onclick="return confirm('Delete this application?')"
+                        >
+                            Delete
+                        </a>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </section>
+
+</div>
+
+<!-- CUSTOM JS -->
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>
